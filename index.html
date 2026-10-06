@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>东新航空 · EASTNEW AIR 虚拟航空</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: "#101828",
+                        navy: "#172A45",
+                        cobalt: "#1F4E8C",
+                        sky: "#2F80ED",
+                        orange: "#F27C22",
+                        champagne: "#D8B56D",
+                        silver: "#8A94A6",
+                        line: "#E6ECF3"
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"]
+                    }
+                }
+            };
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+
+        body {
+            background:
+                radial-gradient(1200px 600px at 10% -10%, rgba(242, 124, 34, 0.12), transparent 60%),
+                radial-gradient(900px 500px at 110% 10%, rgba(47, 128, 237, 0.12), transparent 55%),
+                linear-gradient(180deg, #F7F9FC 0%, #EEF2F7 100%);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #CFD6E2;
+            transition: color 0.25s ease;
+        }
+        .nav-link:hover { color: #F27C22; }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0; bottom: -6px;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, #F27C22, #2F80ED);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .glass-nav {
+            background: linear-gradient(180deg, rgba(16, 24, 40, 0.92), rgba(23, 42, 69, 0.88));
+            backdrop-filter: saturate(140%) blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-title {
+            background: linear-gradient(135deg, #F27C22 0%, #D8B56D 35%, #2F80ED 70%, #1F4E8C 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(230, 236, 243, 0.9);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(242, 124, 34, 0.45);
+            box-shadow: 0 20px 45px -20px rgba(31, 78, 140, 0.35);
+        }
+
+        .dark-card {
+            background: linear-gradient(135deg, #172A45 0%, #101828 100%);
+            border: 1px solid rgba(216, 181, 109, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .dark-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(600px 300px at 0% 0%, rgba(242, 124, 34, 0.18), transparent 60%),
+                radial-gradient(500px 300px at 100% 100%, rgba(47, 128, 237, 0.18), transparent 55%);
+            pointer-events: none;
+        }
+
+        .section-title {
+            position: relative;
+            padding-left: 16px;
+        }
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0; top: 8px; bottom: 8px;
+            width: 4px;
+            background: linear-gradient(180deg, #F27C22, #2F80ED);
+            border-radius: 2px;
+        }
+
+        .line-row {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(242, 124, 34, 0.35), rgba(47, 128, 237, 0.35), transparent);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F27C22, #E56412);
+            box-shadow: 0 10px 24px -12px rgba(242, 124, 34, 0.55);
+        }
+        .btn-primary:hover { filter: brightness(1.05); }
+
+        .btn-ghost {
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); }
+
+        .tag {
+            border: 1px solid rgba(216, 181, 109, 0.45);
+            color: #D8B56D;
+            background: rgba(216, 181, 109, 0.08);
+        }
+
+        .mobile-menu {
+            transition: transform 0.35s ease, opacity 0.3s ease;
+        }
+        .mobile-menu-closed { transform: translateY(-12px); opacity: 0; pointer-events: none; }
+
+        .link-card {
+            border-left: 3px solid transparent;
+            transition: all 0.25s ease;
+        }
+        .link-card:hover {
+            border-left-color: #F27C22;
+            background: linear-gradient(90deg, rgba(242, 124, 34, 0.08), transparent);
+            transform: translateX(4px);
+        }
+
+        .num-display {
+            background: linear-gradient(135deg, rgba(242, 124, 34, 0.12), rgba(47, 128, 237, 0.12));
+            border: 1px solid rgba(230, 236, 243, 0.9);
+        }
+
+        .qq-number {
+            font-family: "DIN Alternate", "Inter", system-ui, sans-serif;
+            letter-spacing: 0.08em;
+            color: #1F4E8C;
+        }
+
+        footer {
+            background: linear-gradient(180deg, #172A45 0%, #101828 100%);
+            border-top: 1px solid rgba(216, 181, 109, 0.35);
+        }
+    </style>
+</head>
+
+<body class="text-ink font-sans antialiased">
+
+    <!-- 顶部导航 -->
+    <header class="glass-nav fixed top-0 inset-x-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <a href="#home" class="flex items-center gap-3 text-white">
+                <div class="leading-tight">
+                    <div class="text-[17px] font-bold tracking-[0.18em]">EASTNEW AIR</div>
+                    <div class="text-[11px] text-silver tracking-widest">东新虚拟航空</div>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-8 text-[14.5px]">
+                <a href="#home" class="nav-link">首页</a>
+                <a href="#about" class="nav-link">团队简介</a>
+                <a href="#liveries" class="nav-link">涂装档案</a>
+                <a href="#newlivery" class="nav-link">新涂装预告</a>
+                <a href="#business" class="nav-link">业务与培训</a>
+                <a href="#tools" class="nav-link">实用工具</a>
+                <a href="#join" class="nav-link">加入我们</a>
+                <a href="#staff" class="nav-link">核心人员</a>
+            </nav>
+
+            <button id="menuBtn" class="lg:hidden w-11 h-11 rounded-lg border border-white/15 text-white flex items-center justify-center">
+                <i class="fa fa-bars text-lg"></i>
+            </button>
+        </div>
+
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="mobile-menu mobile-menu-closed lg:hidden absolute top-20 inset-x-4 bg-ink/95 border border-white/10 rounded-xl p-5 text-white">
+            <div class="grid grid-cols-2 gap-3 text-[14px]">
+                <a href="#home" class="py-2">首页</a>
+                <a href="#about" class="py-2">团队简介</a>
+                <a href="#liveries" class="py-2">涂装档案</a>
+                <a href="#newlivery" class="py-2">新涂装预告</a>
+                <a href="#business" class="py-2">业务与培训</a>
+                <a href="#tools" class="py-2">实用工具</a>
+                <a href="#join" class="py-2">加入我们</a>
+                <a href="#staff" class="py-2">核心人员</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20">
+
+        <!-- Hero -->
+        <section id="home" class="relative px-6 lg:px-10 pt-24 pb-24 md:pt-32 md:pb-32">
+            <div class="max-w-7xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full tag text-xs tracking-[0.25em] mb-6">
+                    <span class="w-1.5 h-1.5 rounded-full bg-orange"></span>
+                    RFS VIRTUAL AVIATION
+                </div>
+
+                <h1 class="text-5xl md:text-7xl lg:text-[88px] font-bold leading-[1.02] tracking-tight">
+                    <span class="hero-title">EASTNEW AIR</span>
+                </h1>
+                <div class="mt-3 text-silver text-sm md:text-base tracking-[0.3em]">东新虚拟航空 · 标准运行 · 定制涂装 · 飞行培训</div>
+
+                <p class="mt-8 max-w-2xl text-base md:text-lg text-[#4A5568] leading-relaxed">
+                    EASTNEW AIR 是一支专注于 RFS 模拟飞行的虚拟航空团体，成立两年，旗下直属约 700 名成员。我们以橙蓝识别、标准程序和定制化涂装，构建更接近真实民航的虚拟飞行体验。
+                </p>
+
+                <div class="mt-10 flex flex-wrap gap-4">
+                    <a href="#newlivery" class="btn-primary px-6 py-3 rounded-lg text-white font-medium text-sm">查看新涂装预告</a>
+                    <a href="#join" class="btn-ghost px-6 py-3 rounded-lg text-white font-medium text-sm">加入 EASTNEW</a>
+                </div>
+
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-5">
+                    <div class="num-display rounded-xl p-5">
+                        <div class="text-3xl md:text-4xl font-bold text-ink">700<span class="text-orange">+</span></div>
+                        <div class="text-xs md:text-sm text-silver mt-1">直属成员</div>
+                    </div>
+                    <div class="num-display rounded-xl p-5">
+                        <div class="text-3xl md:text-4xl font-bold text-ink">2<span class="text-orange">年</span></div>
+                        <div class="text-xs md:text-sm text-silver mt-1">运行经验</div>
+                    </div>
+                    <div class="num-display rounded-xl p-5">
+                        <div class="text-3xl md:text-4xl font-bold text-ink">5<span class="text-orange">+</span></div>
+                        <div class="text-xs md:text-sm text-silver mt-1">涂装档案</div>
+                    </div>
+                    <div class="num-display rounded-xl p-5">
+                        <div class="text-3xl md:text-4xl font-bold text-ink">2<span class="text-orange">类</span></div>
+                        <div class="text-xs md:text-sm text-silver mt-1">核心业务</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="line-row max-w-6xl mx-auto"></div>
+
+        <!-- 团队简介 -->
+        <section id="about" class="px-6 lg:px-10 py-20 md:py-28">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold">团队简介</h2>
+                <p class="mt-6 text-[#4A5568] leading-[1.9] max-w-3xl">
+                    EASTNEW AIR 东新虚拟航空，成立至今已满两年，旗下直属约 700 名成员。团队以 RFS 模拟飞行为主轴，深耕虚拟航司运行、定制涂装设计与飞行管制培训。我们强调标准程序、协同运行和真实民航氛围，定期组织联飞与训练活动，持续聚集热爱模拟航空的同好。
+                </p>
+            </div>
+        </section>
+
+        <!-- 涂装档案 -->
+        <section id="liveries" class="px-6 lg:px-10 py-20 md:py-28">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold">涂装档案</h2>
+                <p class="mt-4 text-silver text-sm max-w-2xl">EASTNEW AIR 的虚拟涂装体系，以橙蓝识别为核心，覆盖标准运营、纪念活动与主题文创。</p>
+
+                <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[11px] tracking-[0.2em] text-silver">B-3507</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-orange/10 text-orange">Boeing 737-800</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">流线艺术涂装</h3>
+                        <p class="text-sm text-[#4A5568] leading-relaxed">白底机身搭配流动橙色波浪曲线，尾翼搭载东新标识，整体具有较强的艺术纪念感。</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[11px] tracking-[0.2em] text-silver">B-6351</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-sky/10 text-sky">Airbus A320-200</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">经典双条带涂装</h3>
+                        <p class="text-sm text-[#4A5568] leading-relaxed">EASTNEW 早期主力运营涂装，纯白机身配双橙色腰线，尾翼保留 LOGO 与书法“东新”。</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[11px] tracking-[0.2em] text-silver">B-CEN</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-sky/10 text-sky">Airbus A320-200</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">简约单条带涂装</h3>
+                        <p class="text-sm text-[#4A5568] leading-relaxed">单橙色腰线的简化运营版本，干净克制，适合日常模拟飞行任务与团队识别。</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[11px] tracking-[0.2em] text-silver">B-2026</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-orange/10 text-orange">SAAB 340-B</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">2026 贺岁限定涂装</h3>
+                        <p class="text-sm text-[#4A5568] leading-relaxed">红白色节日主题，尾翼大面积正红，机身印有“马到成功、东新2026”贺岁文字。</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[11px] tracking-[0.2em] text-silver">B-1789</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-sky/10 text-sky">CRJ-900</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">逐梦向未来主题涂装</h3>
+                        <p class="text-sm text-[#4A5568] leading-relaxed">蓝调渐变机身，融合云朵、帆船、灯塔等文创元素，搭配“逐梦向未来”主题标语。</p>
+                    </div>
+
+                    <div class="dark-card rounded-2xl p-7 text-white flex flex-col justify-between min-h-[220px]">
+                        <div>
+                            <div class="inline-block px-2 py-1 rounded-md bg-white/10 text-[11px] tracking-[0.2em] text-champagne mb-4">COMING SOON</div>
+                            <h3 class="text-lg font-bold mb-2">全新 A320-200 标准涂装</h3>
+                            <p class="text-sm text-silver leading-relaxed">延续 EASTNEW 橙蓝识别体系，优化机身线条与尾标比例，即将正式发布。</p>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="text-[11px] px-2 py-1 rounded-md border border-white/10 text-silver">A320-200</span>
+                            <span class="text-[11px] px-2 py-1 rounded-md border border-white/10 text-silver">橙蓝体系</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 新涂装预告 -->
+        <section id="newlivery" class="px-6 lg:px-10 py-20 md:py-28">
+            <div class="max-w-6xl mx-auto dark-card rounded-3xl p-10 md:p-14 text-white">
+                <div class="relative z-10">
+                    <div class="inline-flex items-center gap-2 tag text-xs tracking-[0.25em] mb-5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-champagne"></span>
+                        NEW LIVERY
+                    </div>
+
+                    <h2 class="text-3xl md:text-5xl font-bold leading-tight">即将发布全新 A320-200 标准涂装</h2>
+                    <p class="mt-5 text-silver max-w-3xl leading-relaxed">
+                        新一代 EASTNEW 主力运营涂装正在打磨中。设计延续橙蓝识别语言，重新梳理机身图形比例、尾翼标识与整体完成度，为团队带来更稳重、更精致的虚拟航空视觉。
+                    </p>
+
+                    <div class="mt-10 grid md:grid-cols-3 gap-5">
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+                            <div class="text-champagne text-sm font-semibold mb-1">橙蓝识别</div>
+                            <div class="text-sm text-silver">保留 EASTNEW 核心配色，强化品牌辨识度。</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+                            <div class="text-champagne text-sm font-semibold mb-1">线条优化</div>
+                            <div class="text-sm text-silver">重新调整机身图形分布，视觉更干净利落。</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+                            <div class="text-champagne text-sm font-semibold mb-1">团队发布</div>
+                            <div class="text-sm text-silver">完成后将面向全团队正式推出。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 业务与培训 -->
+        <section id="business" class="px-6 lg:px-10 py-20 md:py-28">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold">业务与培训</h2>
+                <p class="mt-4 text-silver text-sm max-w-2xl">EASTNEW AIR 围绕 RFS 模拟飞行，提供涂装定制与飞行管制培训两类核心服务。</p>
+
+                <div class="mt-10 grid md:grid-cols-2 gap-6">
+                    <div class="card rounded-2xl p-8">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange to-orange/70 text-white flex items-center justify-center mb-5">
+                            <i class="fa fa-paint-brush text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">RFS 涂装制作业务</h3>
+                        <p class="text-sm text-[#4A5568] leading-relaxed mb-4">承接 RFS 游戏内飞机涂装定制，包括虚拟航司主题、活动纪念主题、团队识别涂装等，从图形规划到机身布局提供完整方案。</p>
+                        <ul class="space-y-2 text-sm text-[#4A5568]">
+                            <li class="flex items-start gap-2"><i class="fa fa-angle-right text-orange mt-1"></i>虚拟航司主题涂装</li>
+                            <li class="flex items-start gap-2"><i class="fa fa-angle-right text-orange mt-1"></i>活动纪念涂装</li>
+                            <li class="flex items-start gap-2"><i class="fa fa-angle-right text-orange mt-1"></i>团队识别涂装定制</li>
+                        </ul>
+                    </div>
+
+                    <div class="card rounded-2xl p-8">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky to-cobalt text-white flex items-center justify-center mb-5">
+                            <i class="fa fa-graduation-cap text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">RFS 飞行员管制培训</h3>
+                        <p class="text-sm text-[#4A5568] leading-relaxed mb-4">面向模拟飞行爱好者开设飞行员基础课程与管制培训，帮助成员建立规范的飞行习惯与协同运行能力。</p>
+                        <ul class="space-y-2 text-sm text-[#4A5568]">
+                            <li class="flex items-start gap-2"><i class="fa fa-angle-right text-sky mt-1"></i>标准程序训练</li>
+                            <li class="flex items-start gap-2"><i class="fa fa-angle-right text-sky mt-1"></i>陆空通话训练</li>
+                            <li class="flex items-start gap-2"><i class="fa fa-angle-right text-sky mt-1"></i>机组协同与管制培训</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实用工具 -->
+        <section id="tools" class="px-6 lg:px-10 py-20 md:py-28">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold">实用工具</h2>
+                <p class="mt-4 text-silver text-sm max-w-2xl">精选飞行模拟常用工具与参考网站，方便机组在准备、飞行与管制过程中快速查阅。</p>
+
+                <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <a href="https://www.skyvector.com/" target="_blank" rel="noopener noreferrer" class="link-card card rounded-xl p-6 block">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-9 h-9 rounded-lg bg-sky/10 text-sky flex items-center justify-center"><i class="fa fa-map"></i></div>
+                            <h3 class="font-bold">SkyVector</h3>
+                        </div>
+                        <p class="text-sm text-[#4A5568]">航图、航路与飞行计划参考工具，适合飞行前航线查阅。</p>
+                    </a>
+
+                    <a href="https://www.flightaware.com/" target="_blank" rel="noopener noreferrer" class="link-card card rounded-xl p-6 block">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-9 h-9 rounded-lg bg-sky/10 text-sky flex items-center justify-center"><i class="fa fa-plane"></i></div>
+                            <h3 class="font-bold">FlightAware</h3>
+                        </div>
+                        <p class="text-sm text-[#4A5568]">实时航班跟踪、机场信息与历史飞行数据查询平台。</p>
+                    </a>
+
+                    <a href="https://www.notams.faa.gov/" target="_blank" rel="noopener noreferrer" class="link-card card rounded-xl p-6 block">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-9 h-9 rounded-lg bg-orange/10 text-orange flex items-center justify-center"><i class="fa fa-bullhorn"></i></div>
+                            <h3 class="font-bold">FAA NOTAM</h3>
+                        </div>
+                        <p class="text-sm text-[#4A5568]">航行通告查询工具，用于获取机场、跑道与空域临时信息。</p>
+                    </a>
+
+                    <a href="https://metar-taf.com/" target="_blank" rel="noopener noreferrer" class="link-card card rounded-xl p-6 block">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-9 h-9 rounded-lg bg-orange/10 text-orange flex items-center justify-center"><i class="fa fa-cloud"></i></div>
+                            <h3 class="font-bold">METAR-TAF</h3>
+                        </div>
+                        <p class="text-sm text-[#4A5568]">机场气象报文与预报查询，帮助机组进行飞行前天气评估。</p>
+                    </a>
+
+                    <a href="https://www.latlong.net/" target="_blank" rel="noopener noreferrer" class="link-card card rounded-xl p-6 block">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-9 h-9 rounded-lg bg-cobalt/10 text-cobalt flex items-center justify-center"><i class="fa fa-crosshairs"></i></div>
+                            <h3 class="font-bold">LatLong</h3>
+                        </div>
+                        <p class="text-sm text-[#4A5568]">经纬度查询与坐标转换工具，适合航路点和机场位置确认。</p>
+                    </a>
+
+                    <a href="https://www.airportcodes.io/" target="_blank" rel="noopener noreferrer" class="link-card card rounded-xl p-6 block">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-9 h-9 rounded-lg bg-cobalt/10 text-cobalt flex items-center justify-center"><i class="fa fa-list"></i></div>
+                            <h3 class="font-bold">Airport Codes</h3>
+                        </div>
+                        <p class="text-sm text-[#4A5568]">全球机场代码查询工具，快速查找 ICAO / IATA 机场信息。</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 加入我们 -->
+        <section id="join" class="px-6 lg:px-10 py-20 md:py-28">
+            <div class="max-w-6xl mx-auto card rounded-3xl p-10 md:p-14">
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <h2 class="section-title text-3xl md:text-4xl font-bold">加入我们</h2>
+                        <p class="mt-5 text-[#4A5568] leading-relaxed">
+                            如果你热爱模拟飞行，希望接触更规范的虚拟航空运行，可以加入 EASTNEW AIR。团队定期开展训练、联飞与交流活动，欢迎同好加入。
+                        </p>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-ink to-navy rounded-2xl p-8 text-white relative overflow-hidden">
+                        <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-orange/20 blur-3xl"></div>
+                        <div class="absolute -left-10 -bottom-10 w-40 h-40 rounded-full bg-sky/20 blur-3xl"></div>
+
+                        <div class="relative z-10">
+                            <div class="text-silver text-sm mb-2">官方 QQ 群</div>
+                            <div class="text-2xl font-bold tracking-wider qq-number">957883295</div>
+                            <p class="mt-4 text-sm text-silver">欢迎加入 EASTNEW AIR 交流与活动。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心人员 -->
+        <section id="staff" class="px-6 lg:px-10 py-20 md:py-28">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold">核心人员</h2>
+                <p class="mt-4 text-silver text-sm max-w-2xl">EASTNEW AIR 核心管理团队，负责团队运行、培训体系、技术支持与日常管理。</p>
+
+                <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-orange to-champagne text-white flex items-center justify-center font-bold">宴</div>
+                            <div>
+                                <div class="font-bold">宴秋</div>
+                                <div class="text-xs text-silver">集团董事长 & 考试院院长</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-[#4A5568]">QQ：3727785826</div>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-sky to-cobalt text-white flex items-center justify-center font-bold">N5</div>
+                            <div>
+                                <div class="font-bold">NO.517</div>
+                                <div class="text-xs text-silver">常务董事长 & 考试院副院长</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-[#4A5568]">QQ：343977361</div>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-orange to-sky text-white flex items-center justify-center font-bold">稀</div>
+                            <div>
+                                <div class="font-bold">稀世珍宝</div>
+                                <div class="text-xs text-silver">宣传部长 & 集团CEO</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-[#4A5568]">QQ：3426622423</div>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-navy to-ink text-white flex items-center justify-center font-bold">怀</div>
+                            <div>
+                                <div class="font-bold">怀旧.</div>
+                                <div class="text-xs text-silver">技术科技部干员 & 管理员</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-[#4A5568]">QQ：3866864493</div>
+                    </div>
+
+                    <div class="card rounded-2xl p-7">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-champagne to-orange text-white flex items-center justify-center font-bold">靓</div>
+                            <div>
+                                <div class="font-bold">小靓同学吖</div>
+                                <div class="text-xs text-silver">技术科技部部长 & 管理员</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-[#4A5568]">QQ：3829144699</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 底部深蓝色版权栏 -->
+    <footer class="px-6 lg:px-10 py-10">
+        <div class="max-w-7xl mx-auto rounded-2xl p-8 md:p-10 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-25" style="background-image:radial-gradient(circle at 20% 0%, #F27C22 0, transparent 40%),radial-gradient(circle at 80% 100%, #2F80ED 0, transparent 40%);"></div>
+
+            <div class="relative z-10 text-center">
+                <div class="text-lg font-bold tracking-[0.2em]">EASTNEW AIR</div>
+                <div class="text-xs text-silver mt-1">东新虚拟航空 · RFS Virtual Aviation</div>
+                <div class="text-sm text-silver mt-4">© 2026 东新航空 版权所有</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+        menuBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("mobile-menu-closed");
+        });
+        mobileMenu.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                mobileMenu.classList.add("mobile-menu-closed");
+            });
+        });
+    </script>
+
+</body>
+</html>
